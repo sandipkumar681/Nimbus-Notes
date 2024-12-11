@@ -4,7 +4,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
-console.log(process.env.PORT);
 
 app.use(
   cors({
