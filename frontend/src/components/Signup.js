@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import loadingBarContext from "../context/loadingBar/loadingBarContext";
 
 const Signup = () => {
   const navigate = useNavigate();
+
+  const { setProgress } = useContext(loadingBarContext);
+
   const initialInfo = {
     name: "",
     email: "",
@@ -13,7 +17,10 @@ const Signup = () => {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
+    setProgress(30);
+
     e.preventDefault();
+
     const { name, email, password } = data;
 
     try {
@@ -28,6 +35,8 @@ const Signup = () => {
         }
       );
 
+      setProgress(60);
+
       const json = await response.json();
 
       if (json.statusCode === 201) {
@@ -35,6 +44,7 @@ const Signup = () => {
       } else {
         setError(json.message || "Signup failed. Please try again.");
       }
+      setProgress(100);
     } catch (error) {
       console.error("Error:", error.message);
     }

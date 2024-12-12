@@ -34,6 +34,8 @@ const Note = () => {
             description={note.description}
             tag={note.tag}
             _id={note._id}
+            createdAt={note.createdAt}
+            updatedAt={note.updatedAt}
           />
         ))}
 

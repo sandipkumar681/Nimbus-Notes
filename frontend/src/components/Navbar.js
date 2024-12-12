@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import noteContext from "../context/note/noteContext";
 
 const Navbar = () => {
@@ -7,8 +7,18 @@ const Navbar = () => {
 
   const { logout } = useContext(noteContext);
 
+  const navigate = useNavigate();
+
   const handleLogOut = () => {
     logout();
+
+    setMenuOpen(false);
+
+    navigate("/");
+  };
+
+  const handleLinkClick = () => {
+    setMenuOpen(false);
   };
 
   return (
@@ -16,7 +26,11 @@ const Navbar = () => {
       <div className="flex items-center justify-between max-w-6xl mx-auto">
         {/* Logo Section */}
         <div className="flex items-center space-x-4">
-          <Link to="/" className="text-2xl font-semibold">
+          <Link
+            to="/"
+            className="text-2xl font-semibold"
+            onClick={handleLinkClick}
+          >
             Nimbus-Notes
           </Link>
         </div>
@@ -80,20 +94,36 @@ const Navbar = () => {
           menuOpen ? "block" : "hidden"
         } md:hidden bg-indigo-600 text-white space-y-4 px-4 py-3`}
       >
-        <Link to="/about" className="block hover:text-indigo-300">
+        <Link
+          to="/about"
+          className="block hover:text-indigo-300"
+          onClick={handleLinkClick}
+        >
           About
         </Link>
 
-        <Link to="/allnote" className="block hover:text-indigo-300">
+        <Link
+          to="/allnote"
+          className="block hover:text-indigo-300"
+          onClick={handleLinkClick}
+        >
           All Notes
         </Link>
 
         {!localStorage.getItem("authToken") ? (
           <>
-            <Link to="/login" className="block hover:text-indigo-300">
+            <Link
+              to="/login"
+              className="block hover:text-indigo-300"
+              onClick={handleLinkClick}
+            >
               Login
             </Link>
-            <Link to="/signup" className="block hover:text-indigo-300">
+            <Link
+              to="/signup"
+              className="block hover:text-indigo-300"
+              onClick={handleLinkClick}
+            >
               Sign Up
             </Link>
           </>

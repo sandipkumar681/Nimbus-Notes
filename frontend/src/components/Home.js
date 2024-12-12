@@ -1,10 +1,11 @@
 import React from "react";
 import { image1, image2, image3 } from "../Image";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <div className="bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 min-h-screen flex flex-col items-center justify-center p-8">
-      <div className="text-center mb-8">
+      <div className="text-center ">
         <h1 className="text-4xl font-bold text-gray-800 leading-tight mb-4">
           Welcome to Nimbus-Notes
         </h1>
@@ -12,8 +13,26 @@ const Home = () => {
           A simple, beautiful, and secure cloud-based notebook to store your
           notes and ideas.
         </p>
-        <div className="flex justify-center space-x-6 mb-8"></div>
       </div>
+
+      {!localStorage.getItem("authToken") ? (
+        <div className="flex space-x-4 mb-6">
+          <Link
+            to="/login"
+            className="bg-transparent text-blue-600 px-6 py-3 border-2 border-blue-600 rounded-lg shadow-md hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Log In
+          </Link>
+          <Link
+            to="/signup"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Sign Up
+          </Link>
+        </div>
+      ) : (
+        <></>
+      )}
 
       <div className="flex flex-wrap justify-center gap-6">
         <div className="w-full md:w-1/2 lg:w-1/3 p-4 flex">
@@ -60,7 +79,8 @@ const Home = () => {
                 Collaborate with Ease
               </h3>
               <p className="text-gray-600">
-                Share your notes and collaborate with others in real-time.
+                Share your notes and collaborate with others instantly and
+                seamlessly.
               </p>
             </div>
           </div>

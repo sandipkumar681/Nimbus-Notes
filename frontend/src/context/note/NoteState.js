@@ -1,17 +1,19 @@
 import noteContext from "./noteContext";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import loadingBarContext from "../loadingBar/loadingBarContext";
 
 const NoteState = (props) => {
   const authToken = localStorage.getItem("authToken");
 
-  const [notes, setNotes] = useState([]);
+  const { setProgress } = useContext(loadingBarContext);
 
-  const navigate = useNavigate();
+  const [notes, setNotes] = useState([]);
 
   //Get All Note
 
   const fetchNote = async () => {
+    setProgress(30);
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_LINK}/api/v1/notes/fetchaallnotes`,
@@ -23,11 +25,14 @@ const NoteState = (props) => {
         }
       );
 
+      setProgress(60);
+
       const json = await response?.json();
 
       if (json.statusCode === 200) {
         setNotes(json.data);
       }
+      setProgress(100);
     } catch (error) {
       console.log("Error: ", error);
     }
@@ -36,6 +41,8 @@ const NoteState = (props) => {
   //Add Note
 
   const addNote = async (title, description, tag) => {
+    setProgress(30);
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_LINK}/api/v1/notes/createnote`,
@@ -49,13 +56,27 @@ const NoteState = (props) => {
         }
       );
 
+      setProgress(60);
+
       const json = await response.json();
 
       if (json.statusCode === 201) {
         const _id = json.data._id;
 
-        setNotes((prev) => [{ _id, title, description, tag }, ...prev]);
+        setNotes((prev) => [
+          {
+            _id,
+            title,
+            description,
+            tag,
+            createdAt: json.data.createdAt,
+            updatedAt: json.data.updatedAt,
+          },
+          ...prev,
+        ]);
       }
+
+      setProgress(100);
     } catch (error) {
       console.log("Error: ", error);
     }
@@ -64,6 +85,8 @@ const NoteState = (props) => {
   //Delete Note
 
   const deleteNote = async (_id) => {
+    setProgress(30);
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_LINK}/api/v1/notes/deletenote/${_id}`,
@@ -75,6 +98,9 @@ const NoteState = (props) => {
           },
         }
       );
+
+      setProgress(60);
+
       const json = await response.json();
 
       if (json.statusCode === 200) {
@@ -84,6 +110,8 @@ const NoteState = (props) => {
           })
         );
       }
+
+      setProgress(100);
     } catch (error) {
       console.log("Error: ", error);
     }
@@ -92,6 +120,8 @@ const NoteState = (props) => {
   //Edit Note
 
   const updateNote = async (updatedNote) => {
+    setProgress(30);
+
     try {
       const { _id, updatedTitle, updatedDescription, updatedTag } = updatedNote;
 
@@ -111,6 +141,8 @@ const NoteState = (props) => {
         }
       );
 
+      setProgress(60);
+
       const json = await response.json();
 
       if (json.statusCode === 200) {
@@ -122,17 +154,23 @@ const NoteState = (props) => {
                   title: updatedTitle,
                   description: updatedDescription,
                   tag: updatedTag,
+                  createdAt: json.data.createdAt,
+                  updatedAt: json.data.updatedAt,
                 }
               : note;
           })
         );
       }
+
+      setProgress(100);
     } catch (error) {
       console.log("Error: ", error);
     }
   };
 
   const logout = async () => {
+    setProgress(30);
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_LINK}/api/v1/users/logoutuser`,
@@ -145,6 +183,8 @@ const NoteState = (props) => {
         }
       );
 
+      setProgress(60);
+
       const json = await response.json();
 
       if (json.statusCode === 200) {
@@ -154,9 +194,9 @@ const NoteState = (props) => {
         //   "noteCookie" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 
         setNotes([]);
-
-        navigate("/");
       }
+
+      setProgress(100);
     } catch (error) {
       console.log("Error: ", error);
     }

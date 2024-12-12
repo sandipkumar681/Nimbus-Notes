@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import loadingBarContext from "../context/loadingBar/loadingBarContext";
 
 const Login = () => {
+  const { setProgress } = useContext(loadingBarContext);
+
   const navigate = useNavigate();
 
   const initialInfo = {
@@ -13,8 +16,12 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
+    setProgress(30);
+
     e.preventDefault();
+
     const { email, password } = data;
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_LINK}/api/v1/users/loginuser`,
@@ -27,6 +34,8 @@ const Login = () => {
         }
       );
 
+      setProgress(60);
+
       const json = await response.json();
 
       if (json.statusCode === 200) {
@@ -36,6 +45,7 @@ const Login = () => {
       } else {
         setError(json.message || "Login failed. Please try again.");
       }
+      setProgress(100);
     } catch (error) {
       console.error("Error:", error.message);
     }

@@ -2,7 +2,7 @@ import { PencilIcon, TrashIcon, CheckIcon } from "@heroicons/react/24/solid";
 import { useContext, useState } from "react";
 import noteContext from "../context/note/noteContext";
 
-const NoteItem = ({ _id, title, description, tag }) => {
+const NoteItem = ({ _id, title, description, tag, createdAt, updatedAt }) => {
   const { deleteNote, updateNote } = useContext(noteContext);
 
   // States for edit mode and updated fields
@@ -23,6 +23,12 @@ const NoteItem = ({ _id, title, description, tag }) => {
 
   const handleDelete = () => {
     deleteNote(_id);
+  };
+
+  const toLocalTime = (gmtString) => {
+    return new Date(gmtString).toLocaleString("en-US", {
+      timeZone: "Asia/Kolkata",
+    });
   };
 
   return (
@@ -66,6 +72,18 @@ const NoteItem = ({ _id, title, description, tag }) => {
           {tag}
         </span>
       )}
+
+      {/* Created At and Updated At */}
+      <div className="text-sm text-gray-500 mb-4">
+        <p>
+          <span className="font-semibold">Created At:</span>{" "}
+          {toLocalTime(createdAt)}
+        </p>
+        <p>
+          <span className="font-semibold">Updated At:</span>{" "}
+          {toLocalTime(updatedAt)}
+        </p>
+      </div>
 
       {/* Action Buttons */}
       <div className="flex space-x-4">

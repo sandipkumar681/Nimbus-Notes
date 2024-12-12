@@ -63,23 +63,24 @@ const About = () => {
         </div>
       </div>
 
-      <div className="mt-16 text-center">
-        <h3 className="text-xl font-semibold">Join Us Today!</h3>
-        <p className="mt-4 text-lg">
-          Start using Cloud Notebook and enjoy secure, convenient access to all
-          your notes!
-        </p>
-        {!localStorage.getItem("authToken") ? (
+      {!localStorage.getItem("authToken") ? (
+        <div className="mt-16 text-center">
+          <h3 className="text-xl font-semibold">Join Us Today!</h3>
+          <p className="mt-4 text-lg">
+            Start using Cloud Notebook and enjoy secure, convenient access to
+            all your notes!
+          </p>
+
           <Link
             to="/signup"
             className="mt-6 inline-block px-6 py-3 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Get Started
           </Link>
-        ) : (
-          <></>
-        )}
-      </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
