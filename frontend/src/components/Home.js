@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { image1, image2, image3 } from "../Image";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const authToken = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    if (authToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [authToken]);
+
   return (
     <div className="bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 min-h-screen flex flex-col items-center justify-center p-8">
       <div className="text-center ">
@@ -15,7 +26,7 @@ const Home = () => {
         </p>
       </div>
 
-      {!localStorage.getItem("authToken") ? (
+      {!isLoggedIn ? (
         <div className="flex space-x-4 mb-6">
           <Link
             to="/login"

@@ -9,8 +9,8 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const handleLogOut = () => {
-    logout();
+  const handleLogOut = async () => {
+    await logout();
 
     setMenuOpen(false);
 
